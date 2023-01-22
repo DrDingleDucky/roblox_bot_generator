@@ -157,7 +157,7 @@ def fill_info(driver):
         By.XPATH, f'//*[@id="{random_gender()}"]')
     gender.click()
 
-    return f"{username}:{password}\n"
+    return f"Name: {username} | Password: {password}\n"
 
 
 def main():
@@ -212,6 +212,8 @@ def main():
 
             if user_options.friend_request != "":
                 add_friend(driver)
+
+            print(account_info)
 
         else:
             print("FUCK, There was an unknown error. Retry in 45 minutes.")
