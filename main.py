@@ -26,7 +26,8 @@ service = Service(executable_path=PATH)
 driver = webdriver.Chrome(service=service, options=options)
 
 driver.get("https://roblox.com")  # Gets the website.
-driver.implicitly_wait(1)  # Waiting for the website to fully load.
+# The maximum amount of time selenium will wait for an element to load.
+driver.implicitly_wait(1)
 
 
 def random_month():
