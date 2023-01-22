@@ -9,6 +9,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
+import options
+
 # The location of your driver.
 PATH = os.path.join("Driver", "chromedriver.exe")
 

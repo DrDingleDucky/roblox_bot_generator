@@ -1,0 +1,10 @@
+number_of_accounts = 1
+# birthday_month = "random"
+# birthday_day = "random"
+# birthday_year = "random"
+# custom_username = "random"
+# custom_password = "random"
+# random_gender = "random"
+# auto_solve_capta = True
+# staggered_start = False
+# account_follow = ["username1", "username2", "username3"]
