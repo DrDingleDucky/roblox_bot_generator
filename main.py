@@ -115,8 +115,7 @@ def add_friend(driver):
             By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
         add_friend.click()
     except:
-        if user_options.friend_request != "":
-            print("Unknown Friend")
+        print("Unknown Friend")
 
 
 def fill_info(driver):
@@ -209,10 +208,8 @@ def main():
             with open(os.path.join("accounts", "accounts.txt"), "a") as accounts:
                 accounts.write(account_info)
 
-            with open(os.path.join("accounts", "cookies.txt"), "a") as cookies:
-                cookies.write(driver.get_cookie(".ROBLOSECURITY")["value"])
-
-            add_friend(driver)
+            if user_options.friend_request != "":
+                add_friend(driver)
 
         else:
             print("FUCK, There was an unknown error. Retry in 45 minutes.")
