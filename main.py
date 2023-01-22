@@ -30,7 +30,7 @@ def random_month():
 
 
 def random_day():
-    return random.choice(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"])
+    return random.choice(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"])
 
 
 def random_year():
@@ -109,7 +109,7 @@ def fill_info():
     gender.click()
 
 
-def main_loop():
+def main():
     while True:
         fill_info()
 
@@ -127,10 +127,6 @@ def main_loop():
         print("Successful")
     else:
         print("FUCK, There was an unknown error. Retry in 45 minutes.")
-
-
-def main():
-    main_loop()
 
 
 if __name__ == "__main__":
