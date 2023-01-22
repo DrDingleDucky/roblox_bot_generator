@@ -5,6 +5,6 @@ number_of_accounts = 1
 # custom_username = "random"
 # custom_password = "random"
 # random_gender = "random"
-auto_solve_capta = False
+auto_solve_capta = True
 # staggered_start = False
 # account_follow = ["username1", "username2", "username3"]

@@ -20,7 +20,7 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 options.add_experimental_option("detach", True)
 
 if user_options.auto_solve_capta:
-    options.add_extension(os.path.join("Solver", "ext.crx"))
+    options.add_extension(os.path.join("solver", "solver.crx"))
 
 service = Service(executable_path=PATH)
 driver = webdriver.Chrome(service=service, options=options)
