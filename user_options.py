@@ -1,10 +1,3 @@
 number_of_accounts = 1
-# birthday_month = "random"
-# birthday_day = "random"
-# birthday_year = "random"
-# custom_username = "random"
-# custom_password = "random"
-# random_gender = "random"
 auto_solve_capta = False
-# staggered_start = False
 friend_request = ""

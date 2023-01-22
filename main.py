@@ -133,7 +133,7 @@ def add_friend():
             By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
         add_friend.click()
     except:
-        print("Friend Not Found")
+        print("Unknown Friend")
 
 
 def fill_info():
@@ -177,29 +177,25 @@ def fill_info():
 
 
 def main():
-    for _ in range(user_options.number_of_accounts):
-        while True:
-            account_info = fill_info()
-
-            time.sleep(0.5)
-
-            if credentials_validation_checker():
-                print("Good Credentials")
-                break
-            else:
-                print("Bad Credentials, Retrying...")
+    while True:
+        account_info = fill_info()
 
         time.sleep(0.5)
 
-        sign_up()
-
-        time.sleep(0.5)
-
-        if error_validation_checker():
-            print("SUCCESSFUL, There was no unknown error")
-        else:
-            print("FUCK, There was an unknown error. Retry in 45 minutes.")
+        if credentials_validation_checker():
+            print("Good Credentials")
             break
+        else:
+            print("Bad Credentials, Retrying...")
+
+    time.sleep(0.5)
+
+    sign_up()
+
+    time.sleep(0.5)
+
+    if error_validation_checker():
+        print("SUCCESSFUL, There was no unknown error")
 
         print("Verifying...")
 
@@ -215,6 +211,9 @@ def main():
             cookies.write(driver.get_cookie(".ROBLOSECURITY")["value"])
 
         add_friend()
+
+    else:
+        print("FUCK, There was an unknown error. Retry in 45 minutes.")
 
     print("Done")
 
