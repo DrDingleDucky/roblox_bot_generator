@@ -22,7 +22,7 @@ service = Service(executable_path=PATH)
 driver = webdriver.Chrome(service=service, options=options)
 
 driver.get("https://roblox.com")  # Gets the website.
-driver.implicitly_wait(5)  # Waiting for the website to fully load.
+driver.implicitly_wait(1)  # Waiting for the website to fully load.
 
 
 def random_month():
@@ -49,7 +49,7 @@ def random_gender():
     return random.choice(["FemaleButton", "MaleButton"])
 
 
-def validation_checker():
+def credentials_validation_checker():
     try:
         sign_up = driver.find_element(
             By.XPATH, '//*[@id="signup-button"]')
@@ -58,6 +58,17 @@ def validation_checker():
         return True
     except:
         return False
+
+
+def error_validation_checker():
+    try:
+        if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
+            print("FUCK! The IP address you are using has been flagged. This error will go away after about 45 minutes. You can use proxies to bypass this error.")
+            return False
+        else:
+            return True
+    except:
+        return True
 
 
 def fill_info():
@@ -104,7 +115,7 @@ def main_loop():
 
         time.sleep(0.5)
 
-        if validation_checker():
+        if credentials_validation_checker():
             print("Good Credentials")
             break
         else:
@@ -112,13 +123,10 @@ def main_loop():
 
     time.sleep(0.5)
 
-    try:
-        if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
-            print("FUCK! The IP address you are using has been flagged. This error will go away after about 45 minutes. You can use proxies to bypass this error.")
-        else:
-            print("Successful")
-    except:
+    if error_validation_checker():
         print("Successful")
+    else:
+        print("FUCK, There was an unknown error. Retry in 45 minutes.")
 
 
 def main():
