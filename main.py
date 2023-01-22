@@ -58,34 +58,6 @@ def validation_checker():
         return True
     except:
         return False
-    # try:
-    #     if driver.find_element(By.XPATH, "//p[@id='signup-usernameInputValidation']").text == "This username is already in use.":
-    #         print("This username is already in use.")
-    #         return False
-    #     else:
-    #         pass
-    # except:
-    #     pass
-
-    # try:
-    #     if driver.find_element(By.XPATH, "//p[@id='signup-usernameInputValidation']").text == "Username not appropriate for Roblox.":
-    #         print("Username not appropriate for Roblox.")
-    #         return False
-    #     else:
-    #         pass
-    # except:
-    #     pass
-
-    # try:
-    #     if driver.find_element(By.XPATH, "//p[@id='signup-usernameInputValidation']").text == "Username might contain private information.":
-    #         print("Username might contain private information.")
-    #         return False
-    #     else:
-    #         pass
-    # except:
-    #     pass
-
-    # return True
 
 
 def fill_info():
