@@ -128,9 +128,13 @@ def add_friend():
     search_element.send_keys(Keys.ARROW_DOWN)
     search_element.send_keys(Keys.ENTER)
 
-    add_friend = driver.find_element(
-        By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
-    add_friend.click()
+    try:
+        add_friend = driver.find_element(
+            By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
+        add_friend.click()
+    except:
+        print("Friend Not Found")
+
 
 def fill_info():
     month_element = driver.find_element(

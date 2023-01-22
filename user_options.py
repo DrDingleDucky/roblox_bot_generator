@@ -7,4 +7,4 @@ number_of_accounts = 1
 # random_gender = "random"
 auto_solve_capta = False
 # staggered_start = False
-friend_request = "FuNNyBuNNy_0o0"
+friend_request = ""
