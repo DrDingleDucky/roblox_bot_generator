@@ -114,6 +114,8 @@ def add_friend(driver):
         add_friend = driver.find_element(
             By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
         add_friend.click()
+
+        print("Friend Request Sent")
     except:
         print("Unknown Friend")
 
@@ -176,7 +178,7 @@ def main():
 
         driver.get("https://roblox.com")  # Gets the website.
         # The maximum amount of time selenium will wait for an element to load.
-        driver.implicitly_wait(30)
+        driver.implicitly_wait(3)
 
         while True:
             account_info = fill_info(driver)
@@ -213,6 +215,10 @@ def main():
 
         else:
             print("FUCK, There was an unknown error. Retry in 45 minutes.")
+
+        print("------------------------------")
+
+        time.sleep(0.5)
 
         driver.quit()
 
