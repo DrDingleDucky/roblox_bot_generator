@@ -8,6 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 import user_options
 
@@ -27,7 +28,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 driver.get("https://roblox.com")  # Gets the website.
 # The maximum amount of time selenium will wait for an element to load.
-driver.implicitly_wait(1)
+driver.implicitly_wait(2)
 
 
 def random_month():
@@ -119,6 +120,18 @@ def error_validation_checker():
         return True
 
 
+def add_friend():
+    search_element = driver.find_element(
+        By.XPATH, '//*[@id="navbar-search-input"]')
+    search_element.click()
+    search_element.send_keys(user_options.friend_request)
+    search_element.send_keys(Keys.ARROW_DOWN)
+    search_element.send_keys(Keys.ENTER)
+
+    add_friend = driver.find_element(
+        By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
+    add_friend.click()
+
 def fill_info():
     month_element = driver.find_element(
         By.XPATH, '//select[@id="MonthDropdown"]')
@@ -184,14 +197,20 @@ def main():
             print("FUCK, There was an unknown error. Retry in 45 minutes.")
             break
 
+        print("Verifying...")
+
         while driver.current_url != "https://www.roblox.com/home?nu=true":
-            print("Loading...")
             time.sleep(1)
 
         print("WE'RE IN BITCH, AHHAHAHAHAHAHA")
 
-        with open(os.path.join("info", "accounts.txt"), "a") as file:
-            file.write(account_info)
+        with open(os.path.join("accounts", "accounts.txt"), "a") as accounts:
+            accounts.write(account_info)
+
+        with open(os.path.join("accounts", "cookies.txt"), "a") as cookies:
+            cookies.write(driver.get_cookie(".ROBLOSECURITY")["value"])
+
+        add_friend()
 
     print("Done")
 
