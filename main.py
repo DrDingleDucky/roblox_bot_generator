@@ -196,13 +196,13 @@ def main():
 
         if error_validation_checker(driver):
             print("SUCCESSFUL, There was no unknown error")
-            
+
             print("Verifying...")
 
             while driver.current_url != "https://www.roblox.com/home?nu=true":
                 time.sleep(0.1)
 
-            print("ACCOUNT CREATED BITCH, AHHAHAHAHAHAHA")
+            print("Account Created")
 
             with open(os.path.join("accounts", "accounts.txt"), "a") as accounts:
                 accounts.write(account_info)
@@ -213,7 +213,7 @@ def main():
             print(account_info)
 
         else:
-            print("FUCK, There was an unknown error. Retry in 45 minutes.")
+            print("There was an unknown error. Retry in 45 minutes.")
 
         print("------------------------------")
 
