@@ -1,3 +1,2 @@
-number_of_accounts = 3
-auto_solve_capta = False
-friend_request = ""
+number_of_accounts = 5
+friend_request = "FuNNyBuNNy_0o0"

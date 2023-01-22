@@ -170,9 +170,6 @@ def main():
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_experimental_option("detach", True)
 
-        if user_options.auto_solve_capta:
-            options.add_extension(os.path.join("solver", "solver.crx"))
-
         service = Service(executable_path=PATH)
         driver = webdriver.Chrome(service=service, options=options)
 
@@ -199,11 +196,11 @@ def main():
 
         if error_validation_checker(driver):
             print("SUCCESSFUL, There was no unknown error")
-
+            
             print("Verifying...")
 
             while driver.current_url != "https://www.roblox.com/home?nu=true":
-                time.sleep(1)
+                time.sleep(0.1)
 
             print("ACCOUNT CREATED BITCH, AHHAHAHAHAHAHA")
 
