@@ -176,11 +176,19 @@ def main():
 
         sign_up()
 
+        time.sleep(0.5)
+
         if error_validation_checker():
             print("SUCCESSFUL, There was no unknown error")
         else:
             print("FUCK, There was an unknown error. Retry in 45 minutes.")
             break
+
+        while driver.current_url != "https://www.roblox.com/home?nu=true":
+            print("Loading...")
+            time.sleep(1)
+
+        print("WE'RE IN BITCH, AHHAHAHAHAHAHA")
 
         with open(os.path.join("info", "accounts.txt"), "a") as file:
             file.write(account_info)
