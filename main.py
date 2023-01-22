@@ -12,24 +12,6 @@ from selenium.webdriver.common.keys import Keys
 
 import user_options
 
-# The location of your driver.
-PATH = os.path.join("Driver", "chromedriver.exe")
-
-options = Options()
-options.add_argument("log-level=3")
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-options.add_experimental_option("detach", True)
-
-if user_options.auto_solve_capta:
-    options.add_extension(os.path.join("solver", "solver.crx"))
-
-service = Service(executable_path=PATH)
-driver = webdriver.Chrome(service=service, options=options)
-
-driver.get("https://roblox.com")  # Gets the website.
-# The maximum amount of time selenium will wait for an element to load.
-driver.implicitly_wait(2)
-
 
 def random_month():
     # return random.choice(["F", "A"])
@@ -58,7 +40,7 @@ def random_gender():
     return random.choice(["FemaleButton", "MaleButton"])
 
 
-def credentials_validation_checker():
+def credentials_validation_checker(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="signup-BirthdayInputValidation"]').text == "Invalid birthday.":
             print("This username is already in use.")
@@ -98,7 +80,7 @@ def credentials_validation_checker():
     return True
 
 
-def sign_up():
+def sign_up(driver):
     try:
         sign_up = driver.find_element(
             By.XPATH, '//*[@id="signup-button"]')
@@ -109,7 +91,7 @@ def sign_up():
         return False
 
 
-def error_validation_checker():
+def error_validation_checker(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
             print("FUCK! The IP address you are using has been flagged. This error will go away after about 45 minutes. You can use proxies to bypass this error.")
@@ -120,7 +102,7 @@ def error_validation_checker():
         return True
 
 
-def add_friend():
+def add_friend(driver):
     search_element = driver.find_element(
         By.XPATH, '//*[@id="navbar-search-input"]')
     search_element.click()
@@ -133,10 +115,11 @@ def add_friend():
             By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
         add_friend.click()
     except:
-        print("Unknown Friend")
+        if user_options.friend_request != "":
+            print("Unknown Friend")
 
 
-def fill_info():
+def fill_info(driver):
     month_element = driver.find_element(
         By.XPATH, '//select[@id="MonthDropdown"]')
     month_element.click()
@@ -177,43 +160,64 @@ def fill_info():
 
 
 def main():
-    while True:
-        account_info = fill_info()
+    for _ in range(user_options.number_of_accounts):
+        # The location of your driver.
+        PATH = os.path.join("Driver", "chromedriver.exe")
+
+        options = Options()
+        options.add_argument("log-level=3")
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        options.add_experimental_option("detach", True)
+
+        if user_options.auto_solve_capta:
+            options.add_extension(os.path.join("solver", "solver.crx"))
+
+        service = Service(executable_path=PATH)
+        driver = webdriver.Chrome(service=service, options=options)
+
+        driver.get("https://roblox.com")  # Gets the website.
+        # The maximum amount of time selenium will wait for an element to load.
+        driver.implicitly_wait(30)
+
+        while True:
+            account_info = fill_info(driver)
+
+            time.sleep(0.5)
+
+            if credentials_validation_checker(driver):
+                print("Good Credentials")
+                break
+            else:
+                print("Bad Credentials, Retrying...")
 
         time.sleep(0.5)
 
-        if credentials_validation_checker():
-            print("Good Credentials")
-            break
+        sign_up(driver)
+
+        time.sleep(0.5)
+
+        if error_validation_checker(driver):
+            print("SUCCESSFUL, There was no unknown error")
+
+            print("Verifying...")
+
+            while driver.current_url != "https://www.roblox.com/home?nu=true":
+                time.sleep(1)
+
+            print("ACCOUNT CREATED BITCH, AHHAHAHAHAHAHA")
+
+            with open(os.path.join("accounts", "accounts.txt"), "a") as accounts:
+                accounts.write(account_info)
+
+            with open(os.path.join("accounts", "cookies.txt"), "a") as cookies:
+                cookies.write(driver.get_cookie(".ROBLOSECURITY")["value"])
+
+            add_friend(driver)
+
         else:
-            print("Bad Credentials, Retrying...")
+            print("FUCK, There was an unknown error. Retry in 45 minutes.")
 
-    time.sleep(0.5)
-
-    sign_up()
-
-    time.sleep(0.5)
-
-    if error_validation_checker():
-        print("SUCCESSFUL, There was no unknown error")
-
-        print("Verifying...")
-
-        while driver.current_url != "https://www.roblox.com/home?nu=true":
-            time.sleep(1)
-
-        print("WE'RE IN BITCH, AHHAHAHAHAHAHA")
-
-        with open(os.path.join("accounts", "accounts.txt"), "a") as accounts:
-            accounts.write(account_info)
-
-        with open(os.path.join("accounts", "cookies.txt"), "a") as cookies:
-            cookies.write(driver.get_cookie(".ROBLOSECURITY")["value"])
-
-        add_friend()
-
-    else:
-        print("FUCK, There was an unknown error. Retry in 45 minutes.")
+        driver.quit()
 
     print("Done")
 
