@@ -159,6 +159,22 @@ def fill_info(driver):
     return f"Name: {username} | Password: {password}"
 
 
+def log_in(driver, username, password):
+    username_element = driver.find_element(
+        By.XPATH, '//*[@id="login-username"]')
+    username_element.click()
+    username_element.send_keys(username)
+
+    password_element = driver.find_element(
+        By.XPATH, '//*[@id="login-password"]')
+    password_element.click()
+    password_element.send_keys(password)
+
+    log_in_element = driver.find_element(
+        By.XPATH, '//*[@id="cross-device-login-button"]')
+    log_in_element.click()
+
+
 def main():
     while True:
         command = input("> ").lower()
@@ -184,7 +200,7 @@ def main():
                     number_of_accounts = int(number_of_accounts)
 
                     friend_request = input("Friend Request > ")
-                    file_name = input("Name Of File > ")
+                    file_name = input("Name Of Pool > ")
 
                     for file in os.listdir(os.path.join("account_pools")):
                         if file != file_name:
@@ -214,7 +230,7 @@ def main():
                                 while True:
                                     account_info = fill_info(driver)
 
-                                    time.sleep(0.5)
+                                    time.sleep(0.8)
 
                                     if credentials_validation_checker(driver):
                                         print("Good Credentials")
@@ -235,7 +251,7 @@ def main():
                                     print("Verifying...")
 
                                     while driver.current_url != "https://www.roblox.com/home?nu=true":
-                                        time.sleep(0.1)
+                                        time.sleep(1)
 
                                     print("Account Created")
 
@@ -259,6 +275,42 @@ def main():
 
                 except:
                     print("The number of accounts is invalid.")
+
+        elif command == "lanch":
+            if len(os.listdir(os.path.join("account_pools"))) <= 0:
+                print("There must be at least one account pool to add to.")
+            else:
+                file_name = input("Name Of Pool > ")
+
+                for file in os.listdir(os.path.join("account_pools")):
+                    if file != file_name:
+                        print("File Not Found")
+                    else:
+                        with open(os.path.join("account_pools", file_name), "r") as file:
+                            lines = file.readlines()
+
+                        for line in lines:
+                            # The location of your driver.
+                            PATH = os.path.join(
+                                "driver", "chromedriver.exe")
+
+                            options = Options()
+                            options.add_argument("log-level=3")
+                            options.add_experimental_option(
+                                'excludeSwitches', ['enable-logging'])
+                            options.add_experimental_option("detach", True)
+                            options.add_argument("--incognito")
+
+                            service = Service(executable_path=PATH)
+                            driver = webdriver.Chrome(
+                                service=service, options=options)
+
+                            # Gets the website.
+                            driver.get("https://www.roblox.com/login")
+                            # The maximum amount of time selenium will wait for an element to load.
+                            driver.implicitly_wait(3)
+
+                            log_in(driver, line[6:26], line[39:])
 
         elif command == "help":
             print("""
