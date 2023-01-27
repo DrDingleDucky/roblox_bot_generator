@@ -79,17 +79,6 @@ def credentials_validation_checker(driver):
     return True
 
 
-def sign_up(driver):
-    try:
-        sign_up = driver.find_element(
-            By.XPATH, '//*[@id="signup-button"]')
-        sign_up.click()
-
-        return True
-    except:
-        return False
-
-
 def error_validation_checker(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
@@ -101,25 +90,23 @@ def error_validation_checker(driver):
         return True
 
 
-def add_friend(driver, friend_request):
-    search_element = driver.find_element(
-        By.XPATH, '//*[@id="navbar-search-input"]')
-    search_element.click()
-    search_element.send_keys(friend_request)
-    search_element.send_keys(Keys.ARROW_DOWN)
-    search_element.send_keys(Keys.ENTER)
-
+def number_validation_checker(number_of_accounts):
     try:
-        add_friend = driver.find_element(
-            By.XPATH, '/html/body/div[3]/main/div[2]/div[2]/div/div/div/ul/li/div/ng-include/div[1]/button')
-        add_friend.click()
-
-        print("Friend Request Sent")
+        number_of_accounts = int(number_of_accounts)
+        return False
     except:
-        print("Unknown Friend")
+        return True
 
 
-def fill_info(driver):
+def file_validation_checker(file_name):
+    for file in os.listdir(os.path.join("account_pools")):
+        if file != file_name:
+            return True
+        else:
+            return False
+
+
+def sign_up(driver):
     month_element = driver.find_element(
         By.XPATH, '//select[@id="MonthDropdown"]')
     month_element.click()
@@ -192,125 +179,106 @@ def main():
 
         elif command == "add":
             if len(os.listdir(os.path.join("account_pools"))) <= 0:
-                print("There must be at least one account pool to add to.")
+                print("No Pools Found")
             else:
                 number_of_accounts = input("Number Of Accounts > ")
+                file_name = input("Name Of Pool > ")
 
-                try:
-                    number_of_accounts = int(number_of_accounts)
+                if number_validation_checker(number_of_accounts):
+                    print("Accounts Number Invalid")
+                elif file_validation_checker(file_name):
+                    print("File Not Found")
+                else:
+                    print("-----------------------------")
 
-                    friend_request = input("Friend Request > ")
-                    file_name = input("Name Of Pool > ")
+                    for _ in range(number_of_accounts):
+                        PATH = os.path.join("driver", "chromedriver.exe")
 
-                    for file in os.listdir(os.path.join("account_pools")):
-                        if file != file_name:
-                            print("File Not Found")
+                        options = Options()
+                        # options.add_argument("log-level=3")
+                        options.add_argument("--incognito")
+                        options.add_experimental_option(
+                            'excludeSwitches', ['enable-logging'])
+                        options.add_experimental_option("detach", True)
+
+                        service = Service(executable_path=PATH)
+                        driver = webdriver.Chrome(
+                            service=service, options=options)
+
+                        driver.get("https://roblox.com")
+                        driver.implicitly_wait(3)
+
+                        while True:
+                            account_info = sign_up(driver)
+
+                            time.sleep(0.8)
+
+                            if credentials_validation_checker(driver):
+                                print("SUCCESSFUL - Good Credentials")
+                                break
+                            else:
+                                print("FAILED - Bad Credentials, Retrying...")
+
+                        time.sleep(0.6)
+
+                        sign_up = driver.find_element(
+                            By.XPATH, '//*[@id="signup-button"]')
+                        sign_up.click()
+
+                        time.sleep(0.6)
+
+                        if error_validation_checker(driver):
+                            print("SUCCESSFUL, No Unknown Error Occurred")
                         else:
-                            for _ in range(number_of_accounts):
-                                # The location of your driver.
-                                PATH = os.path.join(
-                                    "driver", "chromedriver.exe")
+                            print("FAILED - An Unknown Error Occurred")
+                            break
 
-                                options = Options()
-                                options.add_argument("log-level=3")
-                                options.add_experimental_option(
-                                    'excludeSwitches', ['enable-logging'])
-                                options.add_experimental_option("detach", True)
-                                options.add_argument("--incognito")
+                        print("Waiting For Human Verification...")
 
-                                service = Service(executable_path=PATH)
-                                driver = webdriver.Chrome(
-                                    service=service, options=options)
+                        while driver.current_url != "https://www.roblox.com/home?nu=true":
+                            time.sleep(0.6)
 
-                                # Gets the website.
-                                driver.get("https://roblox.com")
-                                # The maximum amount of time selenium will wait for an element to load.
-                                driver.implicitly_wait(3)
+                        print("ACCOUNT CREATED")
 
-                                while True:
-                                    account_info = fill_info(driver)
+                        with open(os.path.join("account_pools", file_name), "a") as accounts:
+                            accounts.write(f"{account_info}\n")
 
-                                    time.sleep(0.8)
+                        print(account_info)
+                        print("-----------------------------")
 
-                                    if credentials_validation_checker(driver):
-                                        print("Good Credentials")
-                                        break
-                                    else:
-                                        print("Bad Credentials, Retrying...")
-
-                                time.sleep(0.5)
-
-                                sign_up(driver)
-
-                                time.sleep(0.5)
-
-                                if error_validation_checker(driver):
-                                    print(
-                                        "SUCCESSFUL, There was no unknown error")
-
-                                    print("Verifying...")
-
-                                    while driver.current_url != "https://www.roblox.com/home?nu=true":
-                                        time.sleep(1)
-
-                                    print("Account Created")
-
-                                    with open(os.path.join("account_pools", file_name), "a") as accounts:
-                                        accounts.write(f"{account_info}\n")
-
-                                    if friend_request != "" and not bool(re.search(r"\s", friend_request)):
-                                        add_friend(driver, friend_request)
-
-                                    print(account_info)
-
-                                else:
-                                    print(
-                                        "There was an unknown error. Retry in 45 minutes.")
-
-                                print("------------------------------")
-
-                                time.sleep(0.5)
-
-                                driver.quit()
-
-                except:
-                    print("The number of accounts is invalid.")
+                        driver.quit()
 
         elif command == "lanch":
             if len(os.listdir(os.path.join("account_pools"))) <= 0:
-                print("There must be at least one account pool to add to.")
+                print("No Pools Found")
             else:
                 file_name = input("Name Of Pool > ")
 
-                for file in os.listdir(os.path.join("account_pools")):
-                    if file != file_name:
-                        print("File Not Found")
-                    else:
-                        with open(os.path.join("account_pools", file_name), "r") as file:
-                            lines = file.readlines()
+                if file_validation_checker(file_name):
+                    print("File Not Found")
+                else:
+                    with open(os.path.join("account_pools", file_name), "r") as file:
+                        lines = file.readlines()
 
-                        for line in lines:
-                            # The location of your driver.
-                            PATH = os.path.join(
-                                "driver", "chromedriver.exe")
+                    for line in lines:
+                        PATH = os.path.join(
+                            "driver", "chromedriver.exe")
 
-                            options = Options()
-                            options.add_argument("log-level=3")
-                            options.add_experimental_option(
-                                'excludeSwitches', ['enable-logging'])
-                            options.add_experimental_option("detach", True)
-                            options.add_argument("--incognito")
+                        options = Options()
+                        options.add_argument("log-level=3")
+                        options.add_experimental_option(
+                            'excludeSwitches', ['enable-logging'])
+                        options.add_experimental_option("detach", True)
+                        options.add_argument("--incognito")
 
-                            service = Service(executable_path=PATH)
-                            driver = webdriver.Chrome(
-                                service=service, options=options)
+                        service = Service(executable_path=PATH)
+                        driver = webdriver.Chrome(
+                            service=service, options=options)
 
-                            # Gets the website.
-                            driver.get("https://www.roblox.com/login")
-                            # The maximum amount of time selenium will wait for an element to load.
-                            driver.implicitly_wait(3)
+                        driver.get("https://www.roblox.com/login")
+                        driver.implicitly_wait(3)
 
-                            log_in(driver, line[6:26], line[39:])
+                        log_in(driver, line[6:26], line[39:])
 
         elif command == "help":
             print("""
