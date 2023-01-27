@@ -90,9 +90,9 @@ def error_validation_checker(driver):
         return True
 
 
-def number_validation_checker(number_of_accounts):
+def number_validation_checker(number):
     try:
-        number_of_accounts = int(number_of_accounts)
+        int(number)
         return False
     except:
         return True
@@ -191,7 +191,7 @@ def main():
                 else:
                     print("-----------------------------")
 
-                    for _ in range(number_of_accounts):
+                    for _ in range(int(number_of_accounts)):
                         PATH = os.path.join("driver", "chromedriver.exe")
 
                         options = Options()
@@ -221,9 +221,9 @@ def main():
 
                         time.sleep(0.6)
 
-                        sign_up = driver.find_element(
+                        sign_up_element = driver.find_element(
                             By.XPATH, '//*[@id="signup-button"]')
-                        sign_up.click()
+                        sign_up_element.click()
 
                         time.sleep(0.6)
 
@@ -266,8 +266,7 @@ def main():
 
                         options = Options()
                         options.add_argument("log-level=3")
-                        options.add_experimental_option(
-                            'excludeSwitches', ['enable-logging'])
+                        # $ options.add_experimental_option('excludeSwitches', ['enable-logging'])
                         options.add_experimental_option("detach", True)
                         options.add_argument("--incognito")
 
