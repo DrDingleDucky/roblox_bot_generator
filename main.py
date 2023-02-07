@@ -194,7 +194,7 @@ def main():
                         PATH = os.path.join("driver", "chromedriver.exe")
 
                         options = Options()
-                        # options.add_argument("log-level=3")
+                        options.add_argument("log-level=3")
                         options.add_argument("--incognito")
                         options.add_experimental_option(
                             'excludeSwitches', ['enable-logging'])
@@ -265,7 +265,8 @@ def main():
 
                         options = Options()
                         options.add_argument("log-level=3")
-                        # $ options.add_experimental_option('excludeSwitches', ['enable-logging'])
+                        options.add_experimental_option(
+                            'excludeSwitches', ['enable-logging'])
                         options.add_experimental_option("detach", True)
                         options.add_argument("--incognito")
 
