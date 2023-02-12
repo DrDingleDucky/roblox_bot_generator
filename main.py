@@ -174,7 +174,8 @@ def main():
                 print("Bad File Name example: file_name.txt")
 
         elif command == "list":
-            print(os.listdir(os.path.join("account_pools")))
+            for account_pool in os.listdir(os.path.join("account_pools")):
+                print(account_pool)
 
         elif command == "add":
             if len(os.listdir(os.path.join("account_pools"))) <= 0:
