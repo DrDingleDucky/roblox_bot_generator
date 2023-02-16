@@ -1,3 +1,3 @@
 # Roblox-Bot-Generator
 
-Work in Progress
+Easily generate and log in to Roblox accounts.
