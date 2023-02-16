@@ -11,13 +11,11 @@ from selenium.webdriver.common.by import By
 
 
 def random_month():
-    return random.choice(["F", "A"])
-    # return random.choice(["J", "F", "M", "A", "MM", "JJ", "JJJ", "AA", "S", "O", "N", "D"])
+    return random.choice(["J", "F", "M", "A", "MM", "JJ", "JJJ", "AA", "S", "O", "N", "D"])
 
 
 def random_day():
-    return random.choice(["30", "31"])
-    # return random.choice(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"])
+    return random.choice(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"])
 
 
 def random_year():
@@ -25,8 +23,7 @@ def random_year():
 
 
 def random_username():
-    return random.choice(["OGlek00AgfmNLyPoJBkc", "mKFuC6E8Hht44LiYVXpO", "0dCl0VBFuQcGgDlbEr8x"])
-    # return "".join(random.choice(string.digits + string.ascii_letters) for _ in range(20))
+    return "".join(random.choice(string.digits + string.ascii_letters) for _ in range(20))
 
 
 def random_password():
