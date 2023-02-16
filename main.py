@@ -38,7 +38,7 @@ def random_gender():
     return random.choice(["FemaleButton", "MaleButton"])
 
 
-def credentials_validation_checker(driver):
+def credentials_validation(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="signup-BirthdayInputValidation"]').text == "Invalid birthday.":
             print("This username is already in use.")
@@ -78,7 +78,7 @@ def credentials_validation_checker(driver):
     return True
 
 
-def error_validation_checker(driver):
+def error_validation(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
             print("FUCK! The IP address you are using has been flagged. This error will go away after about 45 minutes. You can use proxies to bypass this error.")
@@ -89,7 +89,7 @@ def error_validation_checker(driver):
         return True
 
 
-def number_validation_checker(number):
+def number_validation(number):
     try:
         int(number)
         return False
@@ -97,12 +97,24 @@ def number_validation_checker(number):
         return True
 
 
-def file_validation_checker(file_name):
+def file_validation(file_name):
+    if not file_name.endswith(".txt"):
+        print("Error: file name must end with .txt")
+        return False
+    elif any(char in file_name for char in ["/", "\\", "?", "%", "*", ":", "|", "\"", "<", ">"]):
+        print("Error: file name contains forbidden characters")
+        return False
+    elif os.path.exists(os.path.join("account_pools", file_name)):
+        print("Error: file already exists")
+        return False
+    else:
+        return True
+
+
+def file_search(file_name):
     for file in os.listdir(os.path.join("account_pools")):
-        if file != file_name:
+        if file == file_name:
             return True
-        else:
-            return False
 
 
 def sign_up(driver):
@@ -163,30 +175,33 @@ def log_in(driver, username, password):
 
 def main():
     while True:
-        command = input("> ").lower()
+        command = input("Type 'help' for commands: -> ").lower()
 
-        if command == "new":
-            file_name = input("File Name > ")
+        if command[0:3] == "new":
+            parameters = [string for string in command.split(
+                " ") if string != ""]
 
-            if len(file_name) > 5 and file_name[-4:] == ".txt" and not bool(re.search(r"\s", file_name)):
-                open(os.path.join("account_pools", file_name), "w+")
+            if len(parameters) != 2:
+                print("Error: unknow pramaters")
             else:
-                print("Bad File Name example: file_name.txt")
+                file_name = parameters[1]
 
-        elif command == "list":
-            for account_pool in os.listdir(os.path.join("account_pools")):
-                print(account_pool)
+                if file_validation(file_name):
+                    open(os.path.join("account_pools", file_name), "w").close()
 
-        elif command == "add":
-            if len(os.listdir(os.path.join("account_pools"))) <= 0:
-                print("No Pools Found")
+        elif command[0:3] == "add":
+            parameters = [string for string in command.split(
+                " ") if string != ""]
+
+            if len(parameters) != 3:
+                print("Error: unknow pramaters")
             else:
-                number_of_accounts = input("Number Of Accounts > ")
-                file_name = input("Name Of Pool > ")
+                number_of_accounts = parameters[1]
+                file_name = parameters[2]
 
-                if number_validation_checker(number_of_accounts):
+                if number_validation(number_of_accounts):
                     print("Accounts Number Invalid")
-                elif file_validation_checker(file_name):
+                elif not file_search(file_name):
                     print("File Not Found")
                 else:
                     print("-----------------------------")
@@ -213,7 +228,7 @@ def main():
 
                             time.sleep(0.8)
 
-                            if credentials_validation_checker(driver):
+                            if credentials_validation(driver):
                                 print("SUCCESSFUL - Good Credentials")
                                 break
                             else:
@@ -227,7 +242,7 @@ def main():
 
                         time.sleep(0.6)
 
-                        if error_validation_checker(driver):
+                        if error_validation(driver):
                             print("SUCCESSFUL, No Unknown Error Occurred")
                         else:
                             print("FAILED - An Unknown Error Occurred")
@@ -248,13 +263,16 @@ def main():
 
                         driver.quit()
 
-        elif command == "lanch":
-            if len(os.listdir(os.path.join("account_pools"))) <= 0:
-                print("No Pools Found")
-            else:
-                file_name = input("Name Of Pool > ")
+        elif command[0:5] == "lanch":
+            parameters = [string for string in command.split(
+                " ") if string != ""]
 
-                if file_validation_checker(file_name):
+            if len(parameters) != 2:
+                print("Error: Unknow pramaters")
+            else:
+                file_name = parameters[1]
+
+                if not file_search(file_name):
                     print("File Not Found")
                 else:
                     with open(os.path.join("account_pools", file_name), "r") as file:
@@ -281,13 +299,7 @@ def main():
                         log_in(driver, line[6:26], line[39:])
 
         elif command == "help":
-            print("""
-'new' - create a new account pool
-'list' - list all account pools
-'add' - add accounts to an account pool
-'lanch' - lanch a account pool
-'quit' quit the program
-""")
+            print("No Help Yet")
 
         elif command == "quit":
             print("Quitting Program...")
@@ -295,8 +307,6 @@ def main():
 
         else:
             print(f"'{command}' is not recognized. Type 'help' to see commands.")
-
-        time.sleep(0.1)
 
     print("Done")
 
