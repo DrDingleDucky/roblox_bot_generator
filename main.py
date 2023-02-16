@@ -41,7 +41,7 @@ def random_gender():
 def credentials_validation(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="signup-BirthdayInputValidation"]').text == "Invalid birthday.":
-            print("This username is already in use.")
+            print("Error: This username is already in use.")
             return False
         else:
             pass
@@ -50,7 +50,7 @@ def credentials_validation(driver):
 
     try:
         if driver.find_element(By.XPATH, '//p[@id="signup-usernameInputValidation"]').text == "This username is already in use.":
-            print("This username is already in use.")
+            print("Error: This username is already in use.")
             return False
         else:
             pass
@@ -59,7 +59,7 @@ def credentials_validation(driver):
 
     try:
         if driver.find_element(By.XPATH, '//p[@id="signup-usernameInputValidation"]').text == "Username not appropriate for Roblox.":
-            print("Username not appropriate for Roblox.")
+            print("Error: Username not appropriate for Roblox.")
             return False
         else:
             pass
@@ -68,7 +68,7 @@ def credentials_validation(driver):
 
     try:
         if driver.find_element(By.XPATH, '//p[@id="signup-usernameInputValidation"]').text == "Username might contain private information.":
-            print("Username might contain private information.")
+            print("Error: Username might contain private information.")
             return False
         else:
             pass
@@ -81,7 +81,7 @@ def credentials_validation(driver):
 def error_validation(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
-            print("FUCK! The IP address you are using has been flagged. This error will go away after about 45 minutes. You can use proxies to bypass this error.")
+            print("Error: Sorry! An unknown error occurred. Please try again later.")
             return False
         else:
             return True
@@ -99,13 +99,13 @@ def number_validation(number):
 
 def file_validation(file_name):
     if not file_name.endswith(".txt"):
-        print("Error: file name must end with .txt")
+        print("Error: File name dosent end in '.txt'.")
         return False
     elif any(char in file_name for char in ["/", "\\", "?", "%", "*", ":", "|", "\"", "<", ">"]):
-        print("Error: file name contains forbidden characters")
+        print("Error: File name contains forbidden characters.")
         return False
     elif os.path.exists(os.path.join("account_pools", file_name)):
-        print("Error: file already exists")
+        print("Error: File already exists.")
         return False
     else:
         return True
@@ -182,27 +182,27 @@ def main():
                 " ") if string != ""]
 
             if len(parameters) != 2:
-                print("Error: unknow pramaters")
+                print("Error: Invalid parameters.")
             else:
                 file_name = parameters[1]
 
                 if file_validation(file_name):
                     open(os.path.join("account_pools", file_name), "w").close()
 
-        elif command[0:3] == "add":
+        elif command[0:3] == "gen":
             parameters = [string for string in command.split(
                 " ") if string != ""]
 
             if len(parameters) != 3:
-                print("Error: unknow pramaters")
+                print("Error: Invalid parameters.")
             else:
                 number_of_accounts = parameters[1]
                 file_name = parameters[2]
 
                 if number_validation(number_of_accounts):
-                    print("Accounts Number Invalid")
+                    print("Error: Invalid number of accounts.")
                 elif not file_search(file_name):
-                    print("File Not Found")
+                    print("Error: File not found.")
                 else:
                     print("-----------------------------")
 
@@ -229,10 +229,9 @@ def main():
                             time.sleep(0.8)
 
                             if credentials_validation(driver):
-                                print("SUCCESSFUL - Good Credentials")
                                 break
                             else:
-                                print("FAILED - Bad Credentials, Retrying...")
+                                print("Error: Bad credentials, Retrying...")
 
                         time.sleep(0.6)
 
@@ -242,22 +241,16 @@ def main():
 
                         time.sleep(0.6)
 
-                        if error_validation(driver):
-                            print("SUCCESSFUL, No Unknown Error Occurred")
-                        else:
-                            print("FAILED - An Unknown Error Occurred")
+                        if not error_validation(driver):
                             break
-
-                        print("Waiting For Human Verification...")
 
                         while driver.current_url != "https://www.roblox.com/home?nu=true":
                             time.sleep(0.6)
 
-                        print("ACCOUNT CREATED")
-
                         with open(os.path.join("account_pools", file_name), "a") as accounts:
                             accounts.write(f"{account_info}\n")
 
+                        print("Account Created")
                         print(account_info)
                         print("-----------------------------")
 
@@ -299,7 +292,10 @@ def main():
                         log_in(driver, line[6:26], line[39:])
 
         elif command == "help":
-            print("No Help Yet")
+            print("'new file.txt'   - Create a new accounts pool.")
+            print("'gen 1 file.txt  - Generate accounts and store them in a file.")
+            print("'lanch file.txt' - Lanch all accounts in a file.")
+            print("'quit'           - Quit the program.")
 
         elif command == "quit":
             print("Quitting Program...")
