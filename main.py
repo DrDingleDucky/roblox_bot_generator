@@ -199,7 +199,7 @@ def main():
 
                 if number_validation(number_of_accounts):
                     print("Error: Invalid number of accounts.")
-                elif file_search(file_name):
+                elif not file_search(file_name):
                     print("Error: File not found.")
                 else:
                     print("-----------------------------")
@@ -263,7 +263,7 @@ def main():
             else:
                 file_name = parameters[1]
 
-                if file_search(file_name):
+                if not file_search(file_name):
                     print("File Not Found")
                 else:
                     with open(os.path.join("account_pools", file_name), "r") as file:
