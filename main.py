@@ -111,8 +111,8 @@ def file_search(file_name):
     for file in os.listdir(os.path.join("account_pools")):
         if file == file_name:
             return True
-        else:
-            return False
+        
+    return False
 
 
 def sign_up(driver):
