@@ -212,7 +212,8 @@ def main():
                         options.add_experimental_option("detach", True)
 
                         service = Service(executable_path=PATH)
-                        driver = webdriver.Chrome(service=service, options=options)
+                        driver = webdriver.Chrome(
+                            service=service, options=options)
 
                         driver.get("https://roblox.com")
                         driver.implicitly_wait(30)
