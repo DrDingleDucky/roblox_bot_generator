@@ -210,13 +210,14 @@ def main():
                         options = Options()
                         options.add_argument("log-level=3")
                         options.add_experimental_option("detach", True)
+                        options.add_argument("--disable-blink-features=AutomationControlled")
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
                             service=service, options=options)
 
                         driver.get("https://roblox.com")
-                        driver.implicitly_wait(30)
+                        driver.implicitly_wait(5)
 
                         while True:
                             account_info = sign_up(driver)
@@ -228,20 +229,19 @@ def main():
                             else:
                                 print("Error: Bad credentials, Retrying...")
 
-                        time.sleep(0.6)
+                        time.sleep(0.8)
 
                         sign_up_element = driver.find_element(
                             By.XPATH, '//*[@id="signup-button"]')
                         sign_up_element.click()
 
-                        time.sleep(0.6)
+                        time.sleep(0.8)
 
                         if not error_validation(driver):
                             break
 
                         while driver.current_url != "https://www.roblox.com/home?nu=true":
-                            print("Waiting...")
-                            time.sleep(0.6)
+                            time.sleep(1)
 
                         with open(os.path.join("account_pools", file_name), "a") as accounts:
                             accounts.write(f"{account_info}\n")
@@ -274,13 +274,14 @@ def main():
                         options = Options()
                         options.add_argument("log-level=3")
                         options.add_experimental_option("detach", True)
+                        options.add_argument("--disable-blink-features=AutomationControlled")
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
                             service=service, options=options)
 
                         driver.get("https://www.roblox.com/login")
-                        driver.implicitly_wait(30)
+                        driver.implicitly_wait(5)
 
                         log_in(driver, line[6:26], line[39:])
 
