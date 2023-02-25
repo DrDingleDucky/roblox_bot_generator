@@ -111,7 +111,7 @@ def file_search(file_name):
     for file in os.listdir(os.path.join("account_pools")):
         if file == file_name:
             return True
-        
+
     return False
 
 
@@ -209,17 +209,13 @@ def main():
 
                         options = Options()
                         options.add_argument("log-level=3")
-                        options.add_argument("--incognito")
-                        options.add_experimental_option(
-                            'excludeSwitches', ['enable-logging'])
                         options.add_experimental_option("detach", True)
 
                         service = Service(executable_path=PATH)
-                        driver = webdriver.Chrome(
-                            service=service, options=options)
+                        driver = webdriver.Chrome(service=service, options=options)
 
                         driver.get("https://roblox.com")
-                        driver.implicitly_wait(3)
+                        driver.implicitly_wait(30)
 
                         while True:
                             account_info = sign_up(driver)
@@ -243,6 +239,7 @@ def main():
                             break
 
                         while driver.current_url != "https://www.roblox.com/home?nu=true":
+                            print("Waiting...")
                             time.sleep(0.6)
 
                         with open(os.path.join("account_pools", file_name), "a") as accounts:
@@ -275,17 +272,14 @@ def main():
 
                         options = Options()
                         options.add_argument("log-level=3")
-                        options.add_experimental_option(
-                            'excludeSwitches', ['enable-logging'])
                         options.add_experimental_option("detach", True)
-                        options.add_argument("--incognito")
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
                             service=service, options=options)
 
                         driver.get("https://www.roblox.com/login")
-                        driver.implicitly_wait(3)
+                        driver.implicitly_wait(30)
 
                         log_in(driver, line[6:26], line[39:])
 
