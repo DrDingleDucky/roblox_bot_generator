@@ -251,7 +251,7 @@ def main():
 
                         driver.quit()
 
-        elif command[0:5] == "lanch":
+        elif command[0:6] == "launch":
             parameters = [string for string in command.split(
                 " ") if string != ""]
 
@@ -288,7 +288,7 @@ def main():
         elif command == "help":
             print("'new file.txt' - create a new file to store accounts")
             print("'gen 1 file.txt' - generate accounts and store them in a file")
-            print("'lanch file.txt' - lanch all accounts in a fileg")
+            print("'launch file.txt' - launch all accounts in a fileg")
             print("'quit' - quit the program")
 
         elif command == "quit":
