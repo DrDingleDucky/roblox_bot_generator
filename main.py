@@ -209,9 +209,11 @@ def main():
 
                         options = Options()
                         options.add_argument("log-level=3")
-                        options.add_experimental_option("detach", True)
                         options.add_argument(
                             "--disable-blink-features=AutomationControlled")
+                        options.add_experimental_option("detach", True)
+                        options.add_experimental_option(
+                            'excludeSwitches', ['enable-logging'])
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
@@ -272,9 +274,11 @@ def main():
 
                         options = Options()
                         options.add_argument("log-level=3")
-                        options.add_experimental_option("detach", True)
                         options.add_argument(
                             "--disable-blink-features=AutomationControlled")
+                        options.add_experimental_option("detach", True)
+                        options.add_experimental_option(
+                            'excludeSwitches', ['enable-logging'])
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
