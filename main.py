@@ -37,7 +37,7 @@ def random_gender():
 def credentials_validation(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="signup-BirthdayInputValidation"]').text == "Invalid birthday.":
-            print("Error: This username is already in use.")
+            print("error: invalid birthday")
             return False
         else:
             pass
@@ -46,7 +46,7 @@ def credentials_validation(driver):
 
     try:
         if driver.find_element(By.XPATH, '//p[@id="signup-usernameInputValidation"]').text == "This username is already in use.":
-            print("Error: This username is already in use.")
+            print("error: this username is already in use")
             return False
         else:
             pass
@@ -55,7 +55,7 @@ def credentials_validation(driver):
 
     try:
         if driver.find_element(By.XPATH, '//p[@id="signup-usernameInputValidation"]').text == "Username not appropriate for Roblox.":
-            print("Error: Username not appropriate for Roblox.")
+            print("error: username not appropriate for roblox")
             return False
         else:
             pass
@@ -64,7 +64,7 @@ def credentials_validation(driver):
 
     try:
         if driver.find_element(By.XPATH, '//p[@id="signup-usernameInputValidation"]').text == "Username might contain private information.":
-            print("Error: Username might contain private information.")
+            print("error: username might contain private information")
             return False
         else:
             pass
@@ -77,7 +77,7 @@ def credentials_validation(driver):
 def error_validation(driver):
     try:
         if driver.find_element(By.XPATH, '//*[@id="GeneralErrorText"]').text == "Sorry! An unknown error occurred. Please try again later.":
-            print("Error: Sorry! An unknown error occurred. Please try again later.")
+            print("error: An unknown error occurred")
             return False
         else:
             return True
@@ -95,13 +95,13 @@ def number_validation(number):
 
 def file_validation(file_name):
     if not file_name.endswith(".txt"):
-        print("Error: File name dosent end in '.txt'.")
+        print("error: file name dosent end in '.txt'")
         return False
     elif any(char in file_name for char in ["/", "\\", "?", "%", "*", ":", "|", "\"", "<", ">"]):
-        print("Error: File name contains forbidden characters.")
+        print("error: file name contains forbidden characters")
         return False
     elif os.path.exists(os.path.join("account_pools", file_name)):
-        print("Error: File already exists.")
+        print("error: file already exists")
         return False
     else:
         return True
@@ -173,14 +173,14 @@ def log_in(driver, username, password):
 
 def main():
     while True:
-        command = input("Type 'help' for commands: -> ").lower()
+        command = input("type 'help' for commands: -> ").lower()
 
         if command[0:3] == "new":
             parameters = [string for string in command.split(
                 " ") if string != ""]
 
             if len(parameters) != 2:
-                print("Error: Invalid parameters.")
+                print("error: invalid parameters")
             else:
                 file_name = parameters[1]
 
@@ -192,15 +192,15 @@ def main():
                 " ") if string != ""]
 
             if len(parameters) != 3:
-                print("Error: Invalid parameters.")
+                print("error: invalid parameters.")
             else:
                 number_of_accounts = parameters[1]
                 file_name = parameters[2]
 
                 if number_validation(number_of_accounts):
-                    print("Error: Invalid number of accounts.")
+                    print("error: invalid number of accounts")
                 elif not file_search(file_name):
-                    print("Error: File not found.")
+                    print("error: file not found")
                 else:
                     print("-----------------------------")
 
@@ -210,7 +210,8 @@ def main():
                         options = Options()
                         options.add_argument("log-level=3")
                         options.add_experimental_option("detach", True)
-                        options.add_argument("--disable-blink-features=AutomationControlled")
+                        options.add_argument(
+                            "--disable-blink-features=AutomationControlled")
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
@@ -226,8 +227,6 @@ def main():
 
                             if credentials_validation(driver):
                                 break
-                            else:
-                                print("Error: Bad credentials, Retrying...")
 
                         time.sleep(0.8)
 
@@ -246,7 +245,7 @@ def main():
                         with open(os.path.join("account_pools", file_name), "a") as accounts:
                             accounts.write(f"{account_info}\n")
 
-                        print("Account Created")
+                        print("account created")
                         print(account_info)
                         print("-----------------------------")
 
@@ -257,12 +256,12 @@ def main():
                 " ") if string != ""]
 
             if len(parameters) != 2:
-                print("Error: Unknow pramaters")
+                print("error: unknow pramaters")
             else:
                 file_name = parameters[1]
 
                 if not file_search(file_name):
-                    print("File Not Found")
+                    print("error: file not found")
                 else:
                     with open(os.path.join("account_pools", file_name), "r") as file:
                         lines = file.readlines()
@@ -274,7 +273,8 @@ def main():
                         options = Options()
                         options.add_argument("log-level=3")
                         options.add_experimental_option("detach", True)
-                        options.add_argument("--disable-blink-features=AutomationControlled")
+                        options.add_argument(
+                            "--disable-blink-features=AutomationControlled")
 
                         service = Service(executable_path=PATH)
                         driver = webdriver.Chrome(
@@ -286,19 +286,17 @@ def main():
                         log_in(driver, line[6:26], line[39:])
 
         elif command == "help":
-            print("'new file.txt'   - Create a new accounts pool.")
-            print("'gen 1 file.txt  - Generate accounts and store them in a file.")
-            print("'lanch file.txt' - Lanch all accounts in a file.")
-            print("'quit'           - Quit the program.")
+            print("'new file.txt' - create a new file to store accounts")
+            print("'gen 1 file.txt' - generate accounts and store them in a file")
+            print("'lanch file.txt' - lanch all accounts in a fileg")
+            print("'quit' - quit the program")
 
         elif command == "quit":
-            print("Quitting Program...")
+            print("quitting program")
             break
 
         else:
-            print(f"'{command}' is not recognized. Type 'help' to see commands.")
-
-    print("Done")
+            print(f"'{command}' is not recognized")
 
 
 if __name__ == "__main__":
