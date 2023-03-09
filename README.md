@@ -6,6 +6,10 @@ Easily generate and log in to Roblox accounts.
 
 ## Instructions
 
+### Python Version
+
+This project was developed using Python 3.10.10.
+
 ### Install Driver
 
 The generator depends on the Selenium Python library, which requires a browser driver. I used Google Chrome, so I will need a Chrome driver. You can find the latest Chrome drivers [here]( https://chromedriver.chromium.org). Note that the driver and browser versions must be the same.
